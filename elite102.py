@@ -4,6 +4,10 @@ import mysql.connector
 connection = mysql.connector.connect()
 cursor = connection.cursor()
 
+#data used to refernece
+account_pin = input("Enter your account PIN: ")
+first_name = input('Enter your first name: ')
+last_name = input('Enter your last name: ')
 
 
 # Main menu
@@ -57,3 +61,15 @@ def create_new_user():
     #friendly bank talk
     print("Thank you for creating you account!")
     print("Returning to main menu")
+
+
+#check total $ amount in account
+def total_money_in_account():
+    cursor = connection.cursor()
+    see_money = ("SELECT totalMoney FROM userinfo WHERE pin = %s AND firstName = %s AND lastName = %s")
+    cursor.execute(see_money,(account_pin, first_name, last_name))
+    for totalmoney in cursor:
+        print("Your total balance is: " + str(totalmoney[0]))
+    cursor.close()
+
+
