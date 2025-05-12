@@ -59,7 +59,7 @@ def create_new_user():
     cursor.close()
     
     #friendly bank talk
-    print("Thank you for creating you account!")
+    print("Thank you for creating your account!")
     print("Returning to main menu")
 
 
@@ -72,4 +72,32 @@ def total_money_in_account():
         print("Your total balance is: " + str(totalmoney[0]))
     cursor.close()
 
+#updates current money with deposit made into account
+def making_deposit():
+    cursor = connection.cursor()
+    deposit = float(input("Enter amount to deposit: "))
+    get_total_money = ("SELECT totalMoney FROM userinfo WHERE pin = %s AND firstName = %s AND lastName = %s")
+    cursor.execute(get_total_money, (account_pin, first_name, last_name))
+    for amts in cursor:
+        amt = float(str(amts[0]))
+    money = deposit + amt
+    new_money = ("UPDATE userinfo SET totalMoney = %s WHERE pin = %s AND firstName = %s AND lastName = %s")
+    cursor.execute(new_money, (money, account_pin, first_name, last_name))
+    connection.commit()
+    print("Your new total balance is: " + str(money))
+    cursor.close()
 
+# updates current money with money being withdrawn(subtracted)
+def withdraw_money():
+    cursor = connection.cursor()
+    withdraw = float(input("Enter amount to withdraw: "))
+    get_total_money = ("SELECT totalMoney FROM userinfo WHERE pin = %s AND firstName = %s AND lastName = %s")
+    cursor.execute(get_total_money, (account_pin, first_name, last_name))
+    for amts in cursor:
+        amt= float(str(amts[0]))
+    money = amt - withdraw
+    new_money = ("UPDATE userinfo SET totalMoney = %s WHERE pin = %s AND firstName = %s AND lastName = %s")
+    cursor.execute(new_money, (money, account_pin, first_name, last_name))
+    connection.commit()
+    print("Your new total balance is: " + str(money))
+    cursor.close()
